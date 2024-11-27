@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from math import sqrt
+from typing_extensions import Self
 
 GRAVITATIONAL_CONSTANT = 6.6743e-11
 
@@ -19,6 +20,16 @@ class MassiveObject:
     y: float
     vx: float
     vy: float
+
+    def update_position(self: Self, time_step: float) -> None:
+        """
+        Update the position of the MassiveObject using its velocity
+        and time_step.
+
+        :param time_step: The time step in seconds
+        """
+        self.x += self.vx * time_step
+        self.y += self.vy * time_step
 
 
 def apply_gravity(object1: MassiveObject, object2: MassiveObject,
@@ -65,11 +76,6 @@ def apply_force(object: MassiveObject, force: float,
     object.vy += time_step * y_acceleration
 
 
-def update_position(object: MassiveObject, time_step: float) -> None:
-    object.x += object.vx * time_step
-    object.y += object.vy * time_step
-
-
 def main() -> None:
     """
     Set up a test system using the masses, positions and velocities of the
@@ -87,8 +93,8 @@ def main() -> None:
     for day in range(one_year):
         for step in range(steps):
             apply_gravity(sun, earth, one_day/steps)
-            update_position(sun, one_day/steps)
-            update_position(earth, one_day/steps)
+            sun.update_position(one_day/steps)
+            earth.update_position(one_day/steps)
             print(f'{day}.{step}: (x, y) = ({earth.x:5e}, {earth.y:4e})')
 
 
