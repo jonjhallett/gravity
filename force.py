@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from itertools import combinations
 from math import sqrt
 from typing_extensions import Self
 
@@ -20,6 +21,9 @@ class MassiveObject:
     y: float
     vx: float
     vy: float
+
+    def __hash__(self: Self):
+        return hash(self.name)
 
     def update_position(self: Self, time_step: float) -> None:
         """
@@ -87,14 +91,17 @@ def main() -> None:
                           x=147.61e9, y=0.0, vx=0.0, vy=-29_784.8)
 
     one_year = 365
-    one_day = 24.0 * 60.0 * 60.0
+    one_day = 24 * 60 * 60
     steps = 100
+
+    solar_system = {sun, earth}
 
     for day in range(one_year):
         for step in range(steps):
-            apply_gravity(sun, earth, one_day/steps)
-            sun.update_position(one_day/steps)
-            earth.update_position(one_day/steps)
+            for (object1, object2) in combinations(solar_system, 2):
+                apply_gravity(object1, object2, one_day/steps)
+            for object in solar_system:
+                object.update_position(one_day/steps)
             print(f'{day}.{step}: (x, y) = ({earth.x:5e}, {earth.y:4e})')
 
 
