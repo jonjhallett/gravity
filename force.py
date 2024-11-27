@@ -6,6 +6,13 @@ GRAVITATIONAL_CONSTANT = 6.6743e-11
 
 @dataclass
 class MassiveObject:
+    """
+    A simple class representing a massive object, with position and velocity.
+
+    :param mass: Mass in kilograms
+    :param x, y: Position in meters
+    :param vx, vy: Velocity in meters per second
+    """
     name: str
     mass: float
     x: float
@@ -15,7 +22,13 @@ class MassiveObject:
 
 
 def apply_gravity(object1: MassiveObject, object2: MassiveObject,
-                  time_step: float):
+                  time_step: float) -> None:
+    """
+    Step two MassiveObjects using their mutual gravity over time_step
+
+    :param object1, object2: Two MassiveObjects
+    :param time_step: the time over which the interaction happens in seconds
+    """
     x_distance = object2.x - object1.x
     y_distance = object2.y - object1.y
 
@@ -33,7 +46,17 @@ def apply_gravity(object1: MassiveObject, object2: MassiveObject,
 
 
 def apply_force(object: MassiveObject, force: float,
-                cos_theta: float, sin_theta: float, time_step: float):
+                cos_theta: float, sin_theta: float, time_step: float) -> None:
+    """
+    Update the velocities of two MassiveObjects for a given force at a certain
+    angle over an amount of time.
+
+    :param object1, object2: The two MassiveObjects mutually affecting each
+    other
+    :param force: A force in Newtons
+    :cos_theta, sin_theta: the cosine and sine of the force's angle
+    :time_step: The time over which the force is a applied in seconds
+    """
     acceleration = force / object.mass
     x_acceleration = acceleration * cos_theta
     y_acceleration = acceleration * sin_theta
@@ -42,13 +65,31 @@ def apply_force(object: MassiveObject, force: float,
     object.vy += time_step * y_acceleration
 
 
+def update_position(object: MassiveObject, time_step: float) -> None:
+    object.x += object.vx * time_step
+    object.y += object.vy * time_step
+
+
 def main() -> None:
+    """
+    Set up a test system using the masses, positions and velocities of the
+    Sun and Earth. Simulate a year.
+    """
     sun = MassiveObject('Sun', mass=1.989e30,
                         x=0.0, y=0.0, vx=0.0, vy=0.0)
     earth = MassiveObject('Earth', mass=5.972e24,
                           x=147.61e9, y=0.0, vx=0.0, vy=-29_784.8)
-    print(sun)
-    print(earth)
+
+    one_year = 365
+    one_day = 24.0 * 60.0 * 60.0
+    steps = 100
+
+    for day in range(one_year):
+        for step in range(steps):
+            apply_gravity(sun, earth, one_day/steps)
+            update_position(sun, one_day/steps)
+            update_position(earth, one_day/steps)
+            print(f'{day}.{step}: (x, y) = ({earth.x:5e}, {earth.y:4e})')
 
 
 if __name__ == '__main__':
