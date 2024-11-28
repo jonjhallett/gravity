@@ -85,18 +85,19 @@ def main() -> None:
     earth = MassiveObject('Earth', mass=5.972e24,
                           x=147.61e9, y=0.0, vx=0.0, vy=-29_784.8)
 
-    one_year = 365
-    one_day = 24 * 60 * 60
+    days_in_one_year = 365
+    seconds_in_one_day = 24 * 60 * 60
     steps = 100
+    seconds_in_one_step = seconds_in_one_day / steps
 
     solar_system = [sun, earth]
 
-    for day in range(one_year):
+    for day in range(days_in_one_year):
         for step in range(steps):
             for (object1, object2) in combinations(solar_system, 2):
-                apply_gravity(object1, object2, one_day/steps)
+                apply_gravity(object1, object2, seconds_in_one_step)
             for object in solar_system:
-                object.update_position(one_day/steps)
+                object.update_position(seconds_in_one_step)
             print(f'{day}.{step}: (x, y) = ({earth.x:5e}, {earth.y:4e})')
 
 
