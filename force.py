@@ -22,6 +22,24 @@ class MassiveObject:
     vx: float
     vy: float
 
+    def apply_force(self: Self, force: float,
+                    cos_theta: float, sin_theta: float,
+                    time_step: float) -> None:
+        """
+        Update the velocities for a given force at a certain angle over an
+        amount of time.
+
+        :param force: A force in Newtons
+        :cos_theta, sin_theta: the cosine and sine of the force's angle
+        :time_step: The time over which the force is a applied in seconds
+        """
+        acceleration = force / self.mass
+        x_acceleration = acceleration * cos_theta
+        y_acceleration = acceleration * sin_theta
+
+        self.vx += time_step * x_acceleration
+        self.vy += time_step * y_acceleration
+
     def update_position(self: Self, time_step: float) -> None:
         """
         Update the position of the MassiveObject using its velocity
@@ -53,28 +71,8 @@ def apply_gravity(object1: MassiveObject, object2: MassiveObject,
     force = GRAVITATIONAL_CONSTANT * object1.mass * object2.mass \
         / distance_squared
 
-    apply_force(object1, +force, cos_theta, sin_theta, time_step)
-    apply_force(object2, -force, cos_theta, sin_theta, time_step)
-
-
-def apply_force(object: MassiveObject, force: float,
-                cos_theta: float, sin_theta: float, time_step: float) -> None:
-    """
-    Update the velocities of two MassiveObjects for a given force at a certain
-    angle over an amount of time.
-
-    :param object1, object2: The two MassiveObjects mutually affecting each
-    other
-    :param force: A force in Newtons
-    :cos_theta, sin_theta: the cosine and sine of the force's angle
-    :time_step: The time over which the force is a applied in seconds
-    """
-    acceleration = force / object.mass
-    x_acceleration = acceleration * cos_theta
-    y_acceleration = acceleration * sin_theta
-
-    object.vx += time_step * x_acceleration
-    object.vy += time_step * y_acceleration
+    object1.apply_force(+force, cos_theta, sin_theta, time_step)
+    object2.apply_force(-force, cos_theta, sin_theta, time_step)
 
 
 def main() -> None:
