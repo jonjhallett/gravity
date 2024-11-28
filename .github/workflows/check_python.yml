@@ -10,6 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt-get -y install pycodestyle
-      - run: sudo apt-get -y install mypy
+      - run: sudo pip install mypy
       - run: pycodestyle force.py
       - run: mypy force.py
