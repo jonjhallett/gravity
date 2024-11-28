@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: apt-get -y install pycodestyle
-      - run: apt-get -y install mypy
+      - run: sudo apt-get -y install pycodestyle
+      - run: sudo apt-get -y install mypy
       - run: pycodestyle force.py
       - run: mypy force.py
