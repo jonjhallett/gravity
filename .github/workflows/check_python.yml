@@ -1,0 +1,15 @@
+name: Check Python types and style
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 6 * * 1'
+jobs:
+  check-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: apt-get -y install pycodestyle
+      - run: apt-get -y install mypy
+      - run: pycodestyle force.py
+      - run: mypy force.py
