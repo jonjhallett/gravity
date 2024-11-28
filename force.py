@@ -22,9 +22,6 @@ class MassiveObject:
     vx: float
     vy: float
 
-    def __hash__(self: Self):
-        return hash(self.name)
-
     def update_position(self: Self, time_step: float) -> None:
         """
         Update the position of the MassiveObject using its velocity
@@ -94,7 +91,7 @@ def main() -> None:
     one_day = 24 * 60 * 60
     steps = 100
 
-    solar_system = {sun, earth}
+    solar_system = [sun, earth]
 
     for day in range(one_year):
         for step in range(steps):
