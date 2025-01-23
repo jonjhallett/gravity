@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from itertools import combinations
 from math import sqrt
-from typing_extensions import Self
+from typing import Self
 
 GRAVITATIONAL_CONSTANT = 6.6743e-11
 
